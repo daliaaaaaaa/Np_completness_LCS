@@ -1,10 +1,11 @@
-@REM filepath: /C:/Users/TRETEC/Desktop/Np_completness_LCS/compile_and_run.bat
 @echo off
 
 echo Compiling...
-gcc -o menu Menu.c DFS\DFS_LCS.c
+gcc Menu.c DFS\DFS_LCS.c A_etoile\LCS_A_etoile.c LCS\lcs.c -o main
 
-echo Running...
-menu.exe
-
+if %errorlevel% equ 0 (
+    .\main
+) else (
+    echo Compilation failed.
+)
 pause

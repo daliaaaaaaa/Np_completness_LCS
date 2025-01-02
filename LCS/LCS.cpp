@@ -110,7 +110,7 @@ void display_menu_lcs() {
     } while (choice != 3);
 }
 
-int main() {
-    display_menu_lcs();
-    return 0;
-}
+// int main() {
+//     display_menu_lcs();
+//     return 0;
+// }

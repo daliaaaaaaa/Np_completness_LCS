@@ -4,11 +4,9 @@
 #include <time.h>
 #include "DFS_LCS.h"
 
-// Global variables to store the longest subsequence found
 char maxLCS[MAX_LEN];
 int maxLength = 0;
 
-// Function to copy string source to destination
 void stringCopy(char *dest, char *src)
 {
     while (*src)
@@ -20,10 +18,8 @@ void stringCopy(char *dest, char *src)
     *dest = '\0';
 }
 
-// DFS function to find LCS
 void findLCS(char *str1, char *str2, int i, int j, char *currentLCS, int currentLength)
 {
-    // If we've reached the end of either string
     if (i == strlen(str1) || j == strlen(str2))
     {
         if (currentLength > maxLength)
@@ -33,23 +29,16 @@ void findLCS(char *str1, char *str2, int i, int j, char *currentLCS, int current
         }
         return;
     }
-
-    // If characters match, include them in the subsequence
     if (str1[i] == str2[j])
     {
         currentLCS[currentLength] = str1[i];
         currentLCS[currentLength + 1] = '\0';
         findLCS(str1, str2, i + 1, j + 1, currentLCS, currentLength + 1);
     }
-
-    // Skip character from first string
     findLCS(str1, str2, i + 1, j, currentLCS, currentLength);
-
-    // Skip character from second string
     findLCS(str1, str2, i, j + 1, currentLCS, currentLength);
 }
 
-// Helper function to generate random string
 void generateRandomString(char *str, int length)
 {
     const char charset[] = "abcdefghijklmnopqrstuvwxyz";
@@ -61,7 +50,6 @@ void generateRandomString(char *str, int length)
     str[length] = '\0';
 }
 
-// Add new function for performance testing
 void performanceTest()
 {
     FILE *fp;
@@ -79,24 +67,16 @@ void performanceTest()
 
     fprintf(fp, "String Length,Execution Time (seconds)\n");
 
-    // Test for different string lengths
     for (int len = 4; len <= 20; len += 2)
     {
-        // Generate random strings
         generateRandomString(str1, len);
         generateRandomString(str2, len);
-
-        // Reset global variables
         maxLCS[0] = '\0';
         maxLength = 0;
-
-        // Measure time
         start = clock();
         findLCS(str1, str2, 0, 0, currentLCS, 0);
         end = clock();
-
         cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-
         printf("Testing length %d: %.6f seconds\n", len, cpu_time_used);
         fprintf(fp, "%d,%.6f\n", len, cpu_time_used);
     }
@@ -111,7 +91,6 @@ void DFS_LCS()
     char currentLCS[MAX_LEN] = "";
     int choice, length;
 
-    // Seed random number generator
     srand(time(NULL));
 
     while (choice != 4)
@@ -127,7 +106,7 @@ void DFS_LCS()
         switch (choice)
         {
         case 1:
-            printf("Enter length for random strings: ");
+            printf("Enter length for first random string: ");
             scanf("%d", &length);
             if (length >= MAX_LEN)
             {
@@ -135,7 +114,21 @@ void DFS_LCS()
                 break;
             }
             generateRandomString(str1, length);
+
+            printf("Enter length for second random string: ");
+            scanf("%d", &length);
+            if (length >= MAX_LEN)
+            {
+                printf("Length too large. Maximum allowed: %d\n", MAX_LEN - 1);
+                break;
+            }
             generateRandomString(str2, length);
+            if (length >= MAX_LEN)
+            {
+                printf("Length too large. Maximum allowed: %d\n", MAX_LEN - 1);
+                break;
+            }
+
             printf("Generated string 1: %s\n", str1);
             printf("Generated string 2: %s\n", str2);
             break;
@@ -162,14 +155,9 @@ void DFS_LCS()
 
         if (choice != 3 && choice != 4)
         {
-            // Initialize global variables
             maxLCS[0] = '\0';
             maxLength = 0;
-
-            // Find LCS
             findLCS(str1, str2, 0, 0, currentLCS, 0);
-
-            // Print result
             printf("Longest Common Subsequence: %s\n", maxLCS);
             printf("Length of LCS: %d\n", maxLength);
         }
