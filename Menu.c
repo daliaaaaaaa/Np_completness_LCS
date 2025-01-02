@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "DFS\DFS_LCS.h"
+#include "LCS\LCS.h"
 
 void DFS_LCS();
 
@@ -22,7 +23,7 @@ int main()
         switch (choice)
         {
         case 1:
-            // ...call Dynamic Programming LCS function here...
+            display_menu_lcs();
             break;
         case 2:
             printf("You chose DFS method.\n");
