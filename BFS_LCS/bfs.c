@@ -120,7 +120,7 @@ void calculateComplexity(const char *filename, int maxLength, int step) {
         return;
     }
 
-    fprintf(file, "Taille,Temps (ms)\n");
+    fprintf(file, "Taille,Temps (s)\n");
 
     char X[1000];
     char Y[1000];
@@ -144,7 +144,7 @@ void calculateComplexity(const char *filename, int maxLength, int step) {
 }
 
 void BFS_LCS_Menu() {
-    char str1[100], str2[100], currentLCS[100];
+    char str1[1000], str2[1000], currentLCS[1000];
     int choice, length;
 
     srand(time(NULL)); // Initialiser la graine aléatoire
@@ -188,7 +188,7 @@ void BFS_LCS_Menu() {
             break;
 
         case 3: // Tester les performances
-            calculateComplexity("performance_bfs.csv", 100, 10);
+            calculateComplexity("performance_bfs.csv", 700, 50);
             printf("Performance test results saved to performance_bfs.csv.\n");
             continue;
 
@@ -212,6 +212,3 @@ void BFS_LCS_Menu() {
 }
 
 
-int main() {
-    BFS_LCS_Menu();
-}
