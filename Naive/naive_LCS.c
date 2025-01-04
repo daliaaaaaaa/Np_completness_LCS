@@ -2,41 +2,27 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include "DFS_LCS.h"
+#include "naive_LCS.h"
 
-char maxLCS[MAX_LEN];
-int maxLength = 0;
-
-void stringCopy(char *dest, char *src)
+int max(int x, int y)
 {
-    while (*src)
-    {
-        *dest = *src;
-        dest++;
-        src++;
-    }
-    *dest = '\0';
+    return x > y ? x : y;
 }
 
-void findLCS(char *str1, char *str2, int i, int j, char *currentLCS, int currentLength)
+int lcsNaive(char *s1, char *s2, int m, int n, char *lcs_str)
 {
-    if (i == strlen(str1) || j == strlen(str2))
+    if (m == 0 || n == 0)
+        return 0;
+
+    if (s1[m - 1] == s2[n - 1])
     {
-        if (currentLength > maxLength)
-        {
-            maxLength = currentLength;
-            stringCopy(maxLCS, currentLCS);
-        }
-        return;
+        int len = lcsNaive(s1, s2, m - 1, n - 1, lcs_str);
+        lcs_str[len] = s1[m - 1];
+        return len + 1;
     }
-    if (str1[i] == str2[j])
-    {
-        currentLCS[currentLength] = str1[i];
-        currentLCS[currentLength + 1] = '\0';
-        findLCS(str1, str2, i + 1, j + 1, currentLCS, currentLength + 1);
-    }
-    findLCS(str1, str2, i + 1, j, currentLCS, currentLength);
-    findLCS(str1, str2, i, j + 1, currentLCS, currentLength);
+    else
+
+        return max(lcsNaive(s1, s2, m, n - 1, lcs_str), lcsNaive(s1, s2, m - 1, n, lcs_str));
 }
 
 void generateRandomString(char *str, int length)
@@ -56,9 +42,8 @@ void performanceTest()
     clock_t start, end;
     double cpu_time_used;
     char str1[MAX_LEN], str2[MAX_LEN];
-    char currentLCS[MAX_LEN] = "";
 
-    fp = fopen("DFS_LCS_performance.csv", "w");
+    fp = fopen("naive_LCS_performance.csv", "w");
     if (fp == NULL)
     {
         printf("Error opening file!\n");
@@ -71,11 +56,13 @@ void performanceTest()
     {
         generateRandomString(str1, len);
         generateRandomString(str2, len);
-        maxLCS[0] = '\0';
-        maxLength = 0;
+
         start = clock();
-        findLCS(str1, str2, 0, 0, currentLCS, 0);
+        char lcs_result[MAX_LEN];
+        memset(lcs_result, 0, sizeof(lcs_result));
+        int result = lcsNaive(str1, str2, len, len, lcs_result);
         end = clock();
+
         cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
         printf("Testing length %d: %.6f seconds\n", len, cpu_time_used);
         fprintf(fp, "%d,%.6f\n", len, cpu_time_used);
@@ -85,17 +72,16 @@ void performanceTest()
     printf("\nResults saved to lcs_performance.csv\n");
 }
 
-void DFS_LCS()
+void naiveLCS()
 {
     char str1[MAX_LEN], str2[MAX_LEN];
-    char currentLCS[MAX_LEN] = "";
     int choice, length;
 
     srand(time(NULL));
 
-    while (choice != 4)
+    while (1)
     {
-        printf("\nMenu Of solving LCS using DFS:\n");
+        printf("\nMenu Of solving LCS :\n");
         printf("1. Test with random strings\n");
         printf("2. Input custom strings\n");
         printf("3. Run performance test\n");
@@ -123,11 +109,6 @@ void DFS_LCS()
                 break;
             }
             generateRandomString(str2, length);
-            if (length >= MAX_LEN)
-            {
-                printf("Length too large. Maximum allowed: %d\n", MAX_LEN - 1);
-                break;
-            }
 
             printf("Generated string 1: %s\n", str1);
             printf("Generated string 2: %s\n", str2);
@@ -146,7 +127,7 @@ void DFS_LCS()
 
         case 4:
             printf("Exiting program.\n");
-            break;
+            return;
 
         default:
             printf("Invalid choice! Please try again.\n");
@@ -155,11 +136,11 @@ void DFS_LCS()
 
         if (choice != 3 && choice != 4)
         {
-            maxLCS[0] = '\0';
-            maxLength = 0;
-            findLCS(str1, str2, 0, 0, currentLCS, 0);
-            printf("Longest Common Subsequence: %s\n", maxLCS);
-            printf("Length of LCS: %d\n", maxLength);
+            char lcs_result[MAX_LEN];
+            memset(lcs_result, 0, sizeof(lcs_result));
+            int result = lcsNaive(str1, str2, strlen(str1), strlen(str2), lcs_result);
+            printf("Length of Longest Common Subsequence: %d\n", result);
+            printf("Longest Common Subsequence: %s\n", lcs_result);
         }
     }
 }
