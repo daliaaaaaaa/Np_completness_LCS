@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "DFS\DFS_LCS.h"
+#include "Naive\naive_LCS.h"
 #include "LCS\LCS.h"
 #include "BFS_LCS\BFS_LCS.h"
 #include "A_etoile\LCS_A_etoile.h"
 
-void DFS_LCS();
+void naiveLCS();
 void LCS_A_STAR();
 void BFS_LCS_Menu();
 int main()
@@ -16,7 +16,7 @@ int main()
     {
         printf("\nChoose an LCS solving method:\n");
         printf("1. Dynamic Programming\n");
-        printf("2. DFS\n");
+        printf("2. Methode Naive (recursion)\n");
         printf("3. BFS\n");
         printf("4. A*\n");
         printf("5. Verification\n");
@@ -27,15 +27,15 @@ int main()
         switch (choice)
         {
         case 1:
-           display_menu_lcs();
+            display_menu_lcs();
             break;
         case 2:
             printf("You chose DFS method.\n");
-            DFS_LCS();
+            naiveLCS();
             break;
         case 3:
-          BFS_LCS_Menu();
-        break;
+            BFS_LCS_Menu();
+            break;
         case 4:
             LCS_A_STAR();
             break;
